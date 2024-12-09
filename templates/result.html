@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Résultats du Calcul</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .section-title {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Résultats pour {{ ville }}</h1>
+
+    <p><strong>Latitude :</strong> {{ lat }}</p>
+    <p><strong>Longitude :</strong> {{ lon }}</p>
+    <p><strong>Orientation :</strong> {{ aspect }}</p>
+    <p><strong>Productible :</strong> {{ productible }} kWh</p>
+    <p><strong>Dépense mensuelle maximale :</strong> {{ depense_mensuelle_max }} €</p>
+
+    {% if meilleure_installation %}
+        <div class="section-title">Installation Optimale</div>
+        <table>
+            <tr>
+                <th>Puissance (kWc)</th>
+                <td>{{ meilleure_installation.puissance }}</td>
+            </tr>
+            <tr>
+                <th>Prix TTC (€)</th>
+                <td>{{ meilleure_installation.prix_ttc }}</td>
+            </tr>
+            <tr>
+                <th>Prime autoconsommation (€)</th>
+                <td>{{ meilleure_installation.prime }}</td>
+            </tr>
+            <tr>
+                <th>Récupération TVA (€)</th>
+                <td>{{ meilleure_installation.tva }}</td>
+            </tr>
+            <tr>
+                <th>Total des aides (€)</th>
+                <td>{{ meilleure_installation.total_aides }}</td>
+            </tr>
+            <tr>
+                
+                <th>Coût Réel (€)</th>
+                <td>{{ meilleure_installation.cout_reel }}</td>
+            </tr>
+            <tr>
+                
+                <th>Économie Mensuelle Moyenne (€)</th>
+                <td>{{ meilleure_installation.economie_mensuelle_moyenne }}</td>
+            </tr>
+            <tr>
+                <th>Années d'Amortissement</th>
+                <td>{{ meilleure_installation.annees }}</td>
+            </tr>
+        </table>
+
+        <div class="section-title">Options de Mensualités pour l'Installation Optimale</div>
+        <table>
+            <tr>
+                <th>Nombre de Mensualités</th>
+                <th>Mensualité (Prix TTC)</th>
+                <th>Mensualité (Coût Réel)</th>
+            </tr>
+            {% for mensualite, valeurs in meilleure_installation.mensualites_options.items() %}
+                <tr>
+                    <td>{{ mensualite }}</td>
+                    <td>{{ valeurs.prix_ttc }}</td>
+                    <td>{{ valeurs.cout_reel }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Aucune installation optimale trouvée pour la dépense maximale fournie.</p>
+    {% endif %}
+
+    {% if installation_inférieure %}
+        <div class="section-title">Installation Juste Inférieure</div>
+        <table>
+            <tr>
+                <th>Puissance (kWc)</th>
+                <td>{{ installation_inférieure.puissance }}</td>
+            </tr>
+            <tr>
+                <th>Prix TTC (€)</th>
+                <td>{{ installation_inférieure.prix_ttc }}</td>
+            </tr>
+            <tr>
+                <th>Coût Réel (€)</th>
+                <td>{{ installation_inférieure.cout_reel }}</td>
+            </tr>
+            <tr>
+                <th>Économies Cumulées (€)</th>
+                <td>{{ installation_inférieure.economies_cumulees }}</td>
+            </tr>
+            <tr>
+                <th>Économie Mensuelle Moyenne (€)</th>
+                <td>{{ installation_inférieure.economie_mensuelle_moyenne }}</td>
+            </tr>
+            <tr>
+                <th>Années d'Amortissement</th>
+                <td>{{ installation_inférieure.annees }}</td>
+            </tr>
+        </table>
+
+        <div class="section-title">Options de Mensualités pour l'Installation Juste Inférieure</div>
+        <table>
+            <tr>
+                <th>Nombre de Mensualités</th>
+                <th>Mensualité (Prix TTC)</th>
+                <th>Mensualité (Coût Réel)</th>
+            </tr>
+            {% for mensualite, valeurs in installation_inférieure.mensualites_options.items() %}
+                <tr>
+                    <td>{{ mensualite }}</td>
+                    <td>{{ valeurs.prix_ttc }}</td>
+                    <td>{{ valeurs.cout_reel }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+</body>
+</html>
